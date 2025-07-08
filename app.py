@@ -4,10 +4,11 @@ import pandas as pd
 st.set_page_config(layout="wide")
 st.title("Visualizzatore Chromateca con filtro per TEXTURE")
 
-uploaded_file = st.file_uploader("Carica il file CSV", type="csv")
+# 🔗 Inserisci qui il link diretto al file CSV su GitHub
+csv_url = "https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/Chromateca_database.csv"
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file, sep=";", engine="python", on_bad_lines="skip")
+try:
+    df = pd.read_csv(csv_url, sep=";", engine="python", on_bad_lines="skip")
 
     if 'TEXTURE' in df.columns:
         texture_options = df['TEXTURE'].dropna().unique()
@@ -21,5 +22,5 @@ if uploaded_file is not None:
         st.dataframe(filtered_df, use_container_width=True)
     else:
         st.warning("La colonna 'TEXTURE' non è presente nel file.")
-else:
-    st.info("Carica un file CSV per visualizzarne il contenuto.")
+except Exception as e:
+    st.error(f"Errore nel caricamento del file CSV: {e}")
