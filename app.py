@@ -7,7 +7,7 @@ st.set_page_config(layout="wide")
 st.title("BI Portfolio Mapping - Chromateca")
 
 # URL del file CSV su GitHub (modificare con il proprio link raw)
-csv_url = "https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/Chromateca_database.csv"
+csv_url = "Chromateca_database.csv"
 
 @st.cache_data
 def load_data():
