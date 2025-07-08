@@ -1,63 +1,80 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+import plotly.express as px
 
-st.set_page_config(layout="wide")
-st.title("BI Portfolio Mapping - Chromateca")
+# Load the Excel file
+excel_file = "Chromateca_15.10.xlsx"
+df = pd.read_excel(excel_file, sheet_name="Chromateca_database_021024", engine="openpyxl")
 
-# URL del file CSV su GitHub (modificare con il proprio link raw)
-csv_url = "Chromateca_database.csv"
+# Set Streamlit page configuration
+st.set_page_config(page_title="Texture Selection Dashboard", layout="wide")
 
-@st.cache_data
-def load_data():
-    return pd.read_csv(csv_url, sep=";", engine="python", on_bad_lines="skip")
+# Title and description
+st.title("✨ Texture Selection Dashboard")
+st.markdown("Replicating Power BI layout with filters and charts")
 
-df = load_data()
+# Sidebar filters
+st.sidebar.header("🔍 Filters")
 
-# Filtri interattivi
-with st.sidebar:
-    st.header("Filtri")
-    texture = st.multiselect("TEXTURE", sorted(df["TEXTURE"].dropna().unique()))
-    typology = st.multiselect("TYPOLOGY", sorted(df["TYPOLOGY"].dropna().unique()))
-    range_ = st.multiselect("RANGE", sorted(df["RANGE"].dropna().unique()))
-    naturality = st.multiselect("NATURALITY", sorted(df["NATURALITY"].dropna().unique()))
-
-filtered_df = df.copy()
-if texture:
-    filtered_df = filtered_df[filtered_df["TEXTURE"].isin(texture)]
-if typology:
-    filtered_df = filtered_df[filtered_df["TYPOLOGY"].isin(typology)]
-if range_:
-    filtered_df = filtered_df[filtered_df["RANGE"].isin(range_)]
-if naturality:
-    filtered_df = filtered_df[filtered_df["NATURALITY"].isin(naturality)]
-
-# Scatter plot
-st.subheader("Mappa a bolle")
-
-numeric_options = ["LOW_VALUE", "MEDIUM_VALUE", "HIGH_VALUE", "SEMAFOTO_TALCO_COST"]
-x_axis = st.selectbox("Asse X", numeric_options, index=0)
-y_axis = st.selectbox("Asse Y", numeric_options, index=1)
-
-fig, ax = plt.subplots(figsize=(10, 6))
-palette = {"G": "green", "R": "red", "O": "gold", "Y": "gold"}
-
-sns.scatterplot(
-    data=filtered_df,
-    x=x_axis,
-    y=y_axis,
-    size="HIGH_VALUE",
-    hue="ST_STABILITY",
-    palette=palette,
-    sizes=(20, 300),
-    alpha=0.7,
-    ax=ax
+texture_status = st.sidebar.multiselect(
+    "Texture Status",
+    options=df["SEMAFORO_TEC_TRANSFER"].dropna().unique(),
+    default=df["SEMAFORO_TEC_TRANSFER"].dropna().unique()
 )
 
-plt.legend(title="ST_STABILITY", bbox_to_anchor=(1.05, 1), loc='upper left')
-st.pyplot(fig)
+portfolio = st.sidebar.multiselect(
+    "Portfolio Mapping",
+    options=df["COLLECTION"].dropna().unique(),
+    default=df["COLLECTION"].dropna().unique()
+)
 
-# Tabella dati
-st.subheader("Dati filtrati")
-st.dataframe(filtered_df, use_container_width=True)
+texture_profile = st.sidebar.multiselect(
+    "Texture Profile",
+    options=df["DESCRIPTOR"].dropna().unique(),
+    default=df["DESCRIPTOR"].dropna().unique()
+)
+
+sample_location = st.sidebar.multiselect(
+    "Sample Location",
+    options=df["PLANT"].dropna().unique(),
+    default=df["PLANT"].dropna().unique()
+)
+
+# Apply filters
+filtered_df = df[
+    (df["SEMAFORO_TEC_TRANSFER"].isin(texture_status)) &
+    (df["COLLECTION"].isin(portfolio)) &
+    (df["DESCRIPTOR"].isin(texture_profile)) &
+    (df["PLANT"].isin(sample_location))
+]
+
+# Layout with columns
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("📊 Texture Status Distribution")
+    fig1 = px.histogram(filtered_df, x="SEMAFORO_TEC_TRANSFER", color="SEMAFORO_TEC_TRANSFER")
+    st.plotly_chart(fig1, use_container_width=True)
+
+with col2:
+    st.subheader("📦 Portfolio Mapping")
+    fig2 = px.histogram(filtered_df, x="COLLECTION", color="COLLECTION")
+    st.plotly_chart(fig2, use_container_width=True)
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.subheader("🧪 Texture Profile")
+    fig3 = px.histogram(filtered_df, x="DESCRIPTOR", color="DESCRIPTOR")
+    st.plotly_chart(fig3, use_container_width=True)
+
+with col4:
+    st.subheader("🏭 Sample Location")
+    fig4 = px.histogram(filtered_df, x="PLANT", color="PLANT")
+    st.plotly_chart(fig4, use_container_width=True)
+
+# Show filtered data
+with st.expander("📄 Show Filtered Data"):
+    st.dataframe(filtered_df)
+
+
