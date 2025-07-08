@@ -5,7 +5,7 @@ st.set_page_config(layout="wide")
 st.title("Visualizzatore Chromateca con filtro per TEXTURE")
 
 # 🔗 Inserisci qui il link diretto al file CSV su GitHub
-csv_url = "https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/Chromateca_database.csv"
+csv_url = "https://raw.githubusercontent.com/PaoloScotti76/Chroma-View/blob/main/Chromateca_database.csv"
 
 try:
     df = pd.read_csv(csv_url, sep=";", engine="python", on_bad_lines="skip")
