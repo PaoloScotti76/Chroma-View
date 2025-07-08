@@ -1,16 +1,26 @@
+
 import streamlit as st
 import pandas as pd
 
 st.set_page_config(layout="wide")
-st.title("Visualizzatore Chromateca")
+st.title("Visualizzatore Chromateca con filtro per TEXTURE")
 
-uploaded_file = st.file_uploader("Carica un file CSV", type="csv")
+uploaded_file = st.file_uploader("Carica il file CSV", type="csv")
 
 if uploaded_file is not None:
-    try:
-        df = pd.read_csv(uploaded_file, sep=";", engine="python", on_bad_lines="skip")
-        st.dataframe(df, use_container_width=True)
-    except Exception as e:
-        st.error(f"Errore durante la lettura del file: {e}")
+    df = pd.read_csv(uploaded_file, sep=";", engine="python", on_bad_lines="skip")
+
+    if 'TEXTURE' in df.columns:
+        texture_options = df['TEXTURE'].dropna().unique()
+        selected_textures = st.multiselect("Filtra per TEXTURE", options=sorted(texture_options))
+
+        if selected_textures:
+            filtered_df = df[df['TEXTURE'].isin(selected_textures)]
+        else:
+            filtered_df = df
+
+        st.dataframe(filtered_df, use_container_width=True)
+    else:
+        st.warning("La colonna 'TEXTURE' non è presente nel file.")
 else:
-    st.info("Carica un file CSV per visualizzarne il contenuto.")
+    st.info("Carica un file CSV per visualizzarne il contenuto.")
