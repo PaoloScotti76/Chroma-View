@@ -1,0 +1,31 @@
+import pandas as pd
+import tkinter as tk
+from tkinter import ttk
+
+# Carica il file CSV
+df = pd.read_csv("upgit.csv")
+
+# Simula il contenuto HTML associato ai riferimenti CLOB
+mock_html_content = {
+    "oracle.sql.CLOB@1694d36d": "<h1>Immagine 1</h1><p>Segnaposto per immagine 1.</p>",
+    "oracle.sql.CLOB@57e96b34": "<h1>Immagine 2</h1><p>Segnaposto per immagine 2.</p>"
+}
+
+# Crea la finestra principale
+root = tk.Tk()
+root.title("Visualizzazione Immagini da CSV")
+
+# Crea una tabella per mostrare ID e contenuto HTML
+tree = ttk.Treeview(root, columns=("ID", "HTML Content"), show="headings")
+tree.heading("ID", text="ID")
+tree.heading("HTML Content", text="Contenuto HTML")
+
+# Inserisce i dati nella tabella
+for index, row in df.iterrows():
+    html_content = mock_html_content.get(row["DISP_HTML"], "Contenuto non disponibile")
+    tree.insert("", "end", values=(row["ID"], html_content))
+
+tree.pack(expand=True, fill="both")
+
+# Avvia l'applicazione
+root.mainloop()
