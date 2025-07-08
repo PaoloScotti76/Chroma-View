@@ -1,56 +1,63 @@
 import streamlit as st
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide")
-st.title("Visualizzatore Chromateca")
+st.title("BI Portfolio Mapping - Chromateca")
 
-# URL del file CSV su GitHub
-csv_url = "Chromateca_database.csv"
+# URL del file CSV su GitHub (modificare con il proprio link raw)
+csv_url = "https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/Chromateca_database.csv"
 
-# Funzione per convertire valori in LED HTML
-def led_indicator(value):
-    color_map = {'G': 'green', 'R': 'red', 'O': 'gold', 'Y': 'gold'}
-    color = color_map.get(str(value).strip().upper(), 'gray')
-    return f"<div style='width:15px; height:15px; border-radius:50%; background:{color}; margin:auto'></div>"
+@st.cache_data
+def load_data():
+    return pd.read_csv(csv_url, sep=";", engine="python", on_bad_lines="skip")
 
-# Colonne da convertire in LED
-led_columns = [
-    'ST_STABILITY',
-    'ST_COMPATIBILITY',
-    'SEMAFORO_INDUSTRIALIZZAZIONE',
-    'ST_SAMPLING',
-    'ST_SAMPLING_STOCK',
-    'ST_SAFETY_TEST',
-    'ST_IMERYS_TALC',
-    'SEMAFOTO_TALCO_COST',
-    'SEMAFORO_TEC_TRANSFER'
-]
+df = load_data()
 
-try:
-    df = pd.read_csv(csv_url, sep=";", engine="python", on_bad_lines="skip")
+# Filtri interattivi
+with st.sidebar:
+    st.header("Filtri")
+    texture = st.multiselect("TEXTURE", sorted(df["TEXTURE"].dropna().unique()))
+    typology = st.multiselect("TYPOLOGY", sorted(df["TYPOLOGY"].dropna().unique()))
+    range_ = st.multiselect("RANGE", sorted(df["RANGE"].dropna().unique()))
+    naturality = st.multiselect("NATURALITY", sorted(df["NATURALITY"].dropna().unique()))
 
-    # Filtro per TEXTURE
-    if 'TEXTURE' in df.columns:
-        texture_options = df['TEXTURE'].dropna().unique()
-        selected_textures = st.multiselect("Filtra per TEXTURE", options=sorted(texture_options))
+filtered_df = df.copy()
+if texture:
+    filtered_df = filtered_df[filtered_df["TEXTURE"].isin(texture)]
+if typology:
+    filtered_df = filtered_df[filtered_df["TYPOLOGY"].isin(typology)]
+if range_:
+    filtered_df = filtered_df[filtered_df["RANGE"].isin(range_)]
+if naturality:
+    filtered_df = filtered_df[filtered_df["NATURALITY"].isin(naturality)]
 
-        if selected_textures:
-            filtered_df = df[df['TEXTURE'].isin(selected_textures)]
-        else:
-            filtered_df = df
-    else:
-        filtered_df = df
+# Scatter plot
+st.subheader("Mappa a bolle")
 
-    # Sostituisci le colonne LED con HTML
-    df_display = filtered_df.copy()
-    for col in led_columns:
-        if col in df_display.columns:
-            df_display[col] = df_display[col].apply(led_indicator)
+numeric_options = ["LOW_VALUE", "MEDIUM_VALUE", "HIGH_VALUE", "SEMAFOTO_TALCO_COST"]
+x_axis = st.selectbox("Asse X", numeric_options, index=0)
+y_axis = st.selectbox("Asse Y", numeric_options, index=1)
 
-    # Visualizza la tabella con LED
-    st.markdown("<style>td {text-align: center !important;}</style>", unsafe_allow_html=True)
-    st.write(df_display.to_html(escape=False, index=False), unsafe_allow_html=True)
+fig, ax = plt.subplots(figsize=(10, 6))
+palette = {"G": "green", "R": "red", "O": "gold", "Y": "gold"}
 
-except Exception as e:
-    st.error(f"Errore nel caricamento del file CSV: {e}")
+sns.scatterplot(
+    data=filtered_df,
+    x=x_axis,
+    y=y_axis,
+    size="HIGH_VALUE",
+    hue="ST_STABILITY",
+    palette=palette,
+    sizes=(20, 300),
+    alpha=0.7,
+    ax=ax
+)
 
+plt.legend(title="ST_STABILITY", bbox_to_anchor=(1.05, 1), loc='upper left')
+st.pyplot(fig)
+
+# Tabella dati
+st.subheader("Dati filtrati")
+st.dataframe(filtered_df, use_container_width=True)
