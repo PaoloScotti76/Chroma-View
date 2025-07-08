@@ -5,7 +5,7 @@ st.set_page_config(layout="wide")
 st.title("Visualizzatore Chromateca con filtro TEXTURE e LED ST_STABILITY")
 
 # URL del file CSV su GitHub
-csv_url = "https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/Chromateca_database.csv"
+csv_url = "Chromateca_database.csv"
 
 # Funzione per convertire ST_STABILITY in LED HTML
 def stability_led(value):
