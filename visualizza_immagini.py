@@ -20,7 +20,7 @@ try:
     matches = re.findall(pattern, content)
 
     if matches:
-        data = pd.DataFrame(matches, columns=["ID", "CODE", "GODET_DESC", "CUSTOMER", "YEAR", "GODET", "NOTE", "IMG"])
+        data = pd.DataFrame(matches, columns=["ID", "CODE", "GODET_DESC", "CUSTOMER", "YEAR", "GODET", "IMG"])
         id_options = ["Tutti"] + sorted(data["ID"].unique().tolist())
         selected_id = st.selectbox("Seleziona un ID da visualizzare:", id_options)
 
@@ -44,7 +44,6 @@ try:
                 **CUSTOMER**: {row['CUSTOMER']}  
                 **YEAR**: {row['YEAR']}  
                 **GODET**: {row['GODET']}  
-                **NOTE**: {row['NOTE']}
                 """)
             except Exception as e:
                 st.error(f"Errore nella visualizzazione dell'immagine ID {selected_id}: {e}")
