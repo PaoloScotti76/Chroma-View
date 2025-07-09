@@ -1,76 +1,44 @@
-import json
+import streamlit as st
+import pandas as pd
 import base64
 from io import BytesIO
-from PIL import Image, UnidentifiedImageError
-import pandas as pd
-import tkinter as tk
-from tkinter import filedialog, messagebox, Listbox, MULTIPLE, Scrollbar, RIGHT, Y, END
-import matplotlib.pyplot as plt
+from PIL import Image
 
-def load_json_file(filepath):
-    with open(filepath, 'r', encoding='utf-8') as f:
-        raw = f.read()
-    # Parsing manuale
-    record = {
-        "ID": 243,
-        "CODE": "H137",
-        "GODET_DESC": "Pastello (28,5 + 14,5) x Ø12,65 mm",
-        "CUSTOMER": "Chromavis",
-        "YEAR": 2017,
-        "GODET": "STICK",
-        "IMG": raw.split('"IMG"')[1].split('"')[1]
-    }
-    return pd.DataFrame([record])
+st.title("Visualizzatore immagini da file JSON")
 
-def show_images():
-    selected_indices = listbox.curselection()
-    if not selected_indices:
-        messagebox.showwarning("Attenzione", "Seleziona almeno un ID.")
-        return
-    selected_ids = [int(listbox.get(i)) for i in selected_indices]
-    filtered_df = df[df['ID'].isin(selected_ids)]
+uploaded_file = st.file_uploader("Carica il file img.json", type="json")
 
-    for _, row in filtered_df.iterrows():
-        try:
-            img_data = base64.b64decode(row['IMG'])
-            img = Image.open(BytesIO(img_data))
-            plt.imshow(img)
-            plt.axis('off')
-            plt.title(f"ID: {row['ID']}")
-            plt.show()
-        except (base64.binascii.Error, UnidentifiedImageError):
-            messagebox.showerror("Errore", f"Immagine non valida per ID: {row['ID']}")
-
-root = tk.Tk()
-root.title("Visualizzatore Immagini da img.json")
-
-file_path = filedialog.askopenfilename(title="Seleziona il file img.json", filetypes=[("JSON files", "*.json")])
-if not file_path:
-    messagebox.showerror("Errore", "Nessun file selezionato.")
-    root.destroy()
-else:
+if uploaded_file is not None:
     try:
-        df = load_json_file(file_path)
+        # Carica il contenuto JSON
+        data = pd.read_json(uploaded_file)
+
+        # Mostra le colonne presenti
+        st.subheader("Colonne presenti nel file:")
+        st.write(data.columns.tolist())
+
+        # Selezione multipla degli ID
+        if "ID" in data.columns:
+            selected_ids = st.multiselect("Seleziona uno o più ID:", data["ID"].unique())
+
+            # Filtra il DataFrame in base agli ID selezionati
+            filtered_data = data[data["ID"].isin(selected_ids)]
+
+            # Visualizza le immagini codificate in base64
+            for _, row in filtered_data.iterrows():
+                st.markdown(f"**ID:** {row['ID']}")
+                if "IMG" in row and isinstance(row["IMG"], str):
+                    try:
+                        img_data = base64.b64decode(row["IMG"])
+                        image = Image.open(BytesIO(img_data))
+                        st.image(image, caption=f"ID: {row['ID']}", use_column_width=True)
+                    except Exception as e:
+                        st.error(f"Errore nella decodifica dell'immagine per ID {row['ID']}: {e}")
+        else:
+            st.warning("La colonna 'ID' non è presente nel file.")
     except Exception as e:
-        messagebox.showerror("Errore", f"Errore nel caricamento del file: {e}")
-        root.destroy()
+        st.error(f"Errore nella lettura del file JSON: {e}")
+else:
+    st.info("Carica un file JSON per iniziare.")
 
-tk.Label(root, text="Colonne presenti nel file:").pack()
-tk.Label(root, text=", ".join(df.columns)).pack()
-
-tk.Label(root, text="Seleziona uno o più ID:").pack()
-frame = tk.Frame(root)
-frame.pack()
-scrollbar = Scrollbar(frame)
-scrollbar.pack(side=RIGHT, fill=Y)
-
-listbox = Listbox(frame, selectmode=MULTIPLE, yscrollcommand=scrollbar.set, width=50)
-for id_ in df['ID'].unique():
-    listbox.insert(END, str(id_))
-listbox.pack()
-scrollbar.config(command=listbox.yview)
-
-tk.Button(root, text="Visualizza Immagini", command=show_images).pack(pady=10)
-
-root.mainloop()
 
