@@ -27,7 +27,7 @@ try:
         try:
             image_data = base64.b64decode(b64_str)
             image = Image.open(BytesIO(image_data))
-            st.image(image, caption=f"ID immagine: {selected_id}", use_column_width=True)
+            st.image(image, caption=f"ID immagine: {selected_id}", use_container_width=True)
         except Exception as e:
             st.error(f"Errore nella visualizzazione dell'immagine ID {selected_id}: {e}")
     else:
