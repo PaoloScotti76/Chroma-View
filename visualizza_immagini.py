@@ -13,7 +13,7 @@ def decode_base64_image(b64_string):
         return None
 
 # Carica il file TSV
-df = pd.read_csv("img2.txt", sep="\t")
+df = pd.read_csv("img.txt", sep="\t")
 
 # Titolo
 st.title("Visualizzazione immagini")
