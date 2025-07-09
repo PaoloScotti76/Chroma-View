@@ -6,7 +6,7 @@ from io import BytesIO
 from PIL import Image
 
 st.set_page_config(page_title="Visualizzatore Immagini con Metadati", layout="wide")
-st.title("Visualizzatore immagini")
+st.title("HOT POURED FXI")
 
 # Leggi il file
 file_path = "img2.txt"
