@@ -4,24 +4,33 @@ import re
 from io import BytesIO
 from PIL import Image
 
+st.set_page_config(page_title="Visualizzatore Immagini", layout="wide")
 st.title("Visualizzatore di immagini da file base64")
 
-uploaded_file = st.file_uploader("Carica un file .txt con immagini JPEG codificate in base64", type="txt")
+# Legge il file localmente
+file_path = "img.txt"
 
-if uploaded_file is not None:
-    content = uploaded_file.read().decode("utf-8")
+try:
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
 
-    # Estrai tutte le stringhe base64 che iniziano con /9j/ (tipico delle immagini JPEG)
-    base64_images = re.findall(r'(/9j/[^\\"]+)', content)
+    # Estrae righe con ID e base64 (formato: ID\t"base64...")
+    matches = re.findall(r'(\d+)\t"(/9j/[^"]+)"', content)
 
-    if base64_images:
-        st.success(f"Trovate {len(base64_images)} immagini.")
-        for i, b64_str in enumerate(base64_images):
-            try:
-                image_data = base64.b64decode(b64_str)
-                image = Image.open(BytesIO(image_data))
-                st.image(image, caption=f"Immagine {i+1}", use_column_width=True)
-            except Exception as e:
-                st.warning(f"Errore nella visualizzazione dell'immagine {i+1}: {e}")
+    if matches:
+        ids = [m[0] for m in matches]
+        selected_id = st.selectbox("Seleziona un ID immagine da visualizzare:", ids)
+
+        # Trova la stringa base64 corrispondente
+        b64_str = dict(matches)[selected_id]
+
+        try:
+            image_data = base64.b64decode(b64_str)
+            image = Image.open(BytesIO(image_data))
+            st.image(image, caption=f"ID immagine: {selected_id}", use_column_width=True)
+        except Exception as e:
+            st.error(f"Errore nella visualizzazione dell'immagine ID {selected_id}: {e}")
     else:
-        st.error("Nessuna immagine base64 trovata nel file.")
+        st.warning("Nessuna immagine trovata nel file.")
+except FileNotFoundError:
+    st.error("Il file 'img 1.txt' non è stato trovato nella directory corrente.")
