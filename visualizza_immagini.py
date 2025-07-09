@@ -22,7 +22,7 @@ st.title("Visualizzazione immagini")
 st.sidebar.header("Filtri")
 id_options = st.sidebar.multiselect("Filtra per ID", options=sorted(df["ID"].unique()))
 code_options = st.sidebar.multiselect("Filtra per CODE", options=sorted(df["CODE"].unique()))
-#godet_options = st.sidebar.multiselect("Filtra per GODET", options=sorted(df["GODET"].unique()))
+godet_options = st.sidebar.multiselect("Filtra per GODET", options=sorted(df["GODET"].unique()))
 year_options = st.sidebar.multiselect("Filtra per YEAR", options=sorted(df["YEAR"].unique()))
 
 # Applica i filtri
@@ -31,8 +31,8 @@ if id_options:
     filtered_df = filtered_df[filtered_df["ID"].isin(id_options)]
 if code_options:
     filtered_df = filtered_df[filtered_df["CODE"].isin(code_options)]
-#if godet_options:
- #   filtered_df = filtered_df[filtered_df["GODET"].isin(godet_options)]
+if godet_options:
+    filtered_df = filtered_df[filtered_df["GODET"].isin(godet_options)]
 if year_options:
     filtered_df = filtered_df[filtered_df["YEAR"].isin(year_options)]
 
