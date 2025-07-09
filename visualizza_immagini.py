@@ -6,7 +6,7 @@ from io import BytesIO
 from PIL import Image
 
 # URL del file JSON su GitHub
-GITHUB_URL = "img.json"
+GITHUB_URL = "https://raw.githubusercontent.com/PaoloScotti76/Chroma-View/main/img.json"
 
 @st.cache_data
 def load_data(url):
