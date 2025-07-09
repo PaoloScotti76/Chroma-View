@@ -37,11 +37,18 @@ if year_options:
     filtered_df = filtered_df[filtered_df["YEAR"].isin(year_options)]
 
 # Visualizza la tabella con immagini
-st.markdown("### Risultati filtrati")
 for idx, row in filtered_df.iterrows():
-    cols = st.columns([1.2, 1.2, 2.5, 1.5, 1.2, 1.2, 3])
-    cols[0].markdown(f"<div style='white-space: nowrap'>{row['ID']}</div>", unsafe_allow_html=True)
-    cols[1].markdown(f"<div style='white-space: nowrap'>{row['CODE']}</div>", unsafe_allow_html=True)
-    cols[2].markdown(f"<div style='white-space: nowrap'>{row['GODET_DESC']}</div>", unsafe_allow_html=True)
-    cols[3].markdown(f"<div style='white-space: nowrap'>{row['CUSTOMER']}</div>", unsafe_allow_html=True)
-    cols[4].markdown(f"<div style='white-space: nowrap'>{row['YEAR']}</div>", unsafe_allow_html=True)
+    cols = st.columns([1, 1, 2, 1, 1, 1, 2])
+    cols[0].write(row["ID"])
+    cols[1].write(row["CODE"])
+    cols[2].write(row["GODET_DESC"])
+    cols[3].write(row["CUSTOMER"])
+    cols[4].write(row["YEAR"])
+    cols[5].write(row["GODET"])
+    
+    img = decode_base64_image(row["IMG"])
+    if img:
+        cols[6].image(img, caption=f"ID {row['ID']}", use_container_width =True)
+    else:
+        cols[6].write("Immagine non valida")
+
