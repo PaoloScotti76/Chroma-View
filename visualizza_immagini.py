@@ -4,18 +4,18 @@ import base64
 from io import BytesIO
 from PIL import Image
 
-# Carica il file TSV
-df = pd.read_csv("img.txt", sep="\t")
-
 # Funzione per convertire base64 in immagine
 def decode_base64_image(b64_string):
     try:
         image_data = base64.b64decode(b64_string)
         return Image.open(BytesIO(image_data))
-    except Exception as e:
+    except Exception:
         return None
 
-# Titolo
+# Carica il file TSV
+df = pd.read_csv("img.txt", sep="\t")
+
+# Titolo dell'app
 st.title("Visualizzazione immagini da file TSV")
 
 # Visualizza la tabella con immagini
