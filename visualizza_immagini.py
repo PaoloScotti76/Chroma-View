@@ -1,53 +1,39 @@
 import streamlit as st
 import pandas as pd
 import base64
-import re
-from io import BytesIO
+from io import StringIO
 from PIL import Image
+import io
 
-st.set_page_config(page_title="Visualizzatore Immagini con Metadati", layout="wide")
-st.title("HOT POURED FXI")
+st.title("Visualizzatore di immagini base64 da ID")
 
-# Leggi il file
-file_path = "img.txt"
+# Caricamento del file
+uploaded_file = st.file_uploader("Carica il file .txt", type="txt")
 
-try:
-    with open(file_path, "r", encoding="utf-8") as f:
-        content = f.read()
+if uploaded_file is not None:
+    # Leggi il contenuto come testo
+    content = uploaded_file.read().decode("utf-8")
 
-    # Estrai righe con ID e metadati
-    pattern = r'(\d+)\t"([^"]+)"\t"([^"]+)"\t"([^"]+)"\t"([^"]+)"\t"([^"]+)"\t"([^"]+)"\t"(/9j/[^"]+)"'
-    matches = re.findall(pattern, content)
+    # Parsing manuale: rimuovi intestazioni e righe vuote
+    lines = [line for line in content.splitlines() if line.strip()]
+    header = lines[0].replace('"', '').split('\t')
+    data = [line.replace('"', '').split('\t') for line in lines[1:] if len(line.split('\t')) == len(header)]
 
-    if matches:
-        data = pd.DataFrame(matches, columns=["ID", "CODE", "GODET_DESC", "CUSTOMER", "YEAR", "GODET", "IMG"])
-        id_options = ["Tutti"] + sorted(data["ID"].unique().tolist())
-        selected_id = st.selectbox("Seleziona un ID da visualizzare:", id_options)
+    # Crea DataFrame
+    df = pd.DataFrame(data, columns=header)
 
-        if selected_id == "Tutti":
-            for _, row in data.iterrows():
-                try:
-                    image_data = base64.b64decode(row["IMG"])
-                    image = Image.open(BytesIO(image_data))
-                    st.image(image, caption=f"ID: {row['ID']} - {row['CODE']}", width=200)
-                except Exception as e:
-                    st.warning(f"Errore con immagine ID {row['ID']}: {e}")
-        else:
-            row = data[data["ID"] == selected_id].iloc[0]
+    # Filtro per ID
+    ids = df["ID"].unique()
+    selected_ids = st.multiselect("Seleziona uno o più ID", ids)
+
+    if selected_ids:
+        filtered_df = df[df["ID"].isin(selected_ids)]
+
+        for idx, row in filtered_df.iterrows():
+            st.markdown(f"**ID:** {row['ID']} - **CODE:** {row['CODE']}")
             try:
-                image_data = base64.b64decode(row["IMG"])
-                image = Image.open(BytesIO(image_data))
-                st.image(image, caption=f"ID: {row['ID']} - {row['CODE']}", width=200)
-                st.markdown(f"""
-                **CODE**: {row['CODE']}  
-                **GODET_DESC**: {row['GODET_DESC']}  
-                **CUSTOMER**: {row['CUSTOMER']}  
-                **YEAR**: {row['YEAR']}  
-                **GODET**: {row['GODET']}  
-                """)
+                img_data = base64.b64decode(row["IMG"])
+                image = Image.open(io.BytesIO(img_data))
+                st.image(image, caption=f"Immagine per ID {row['ID']}", use_column_width=True)
             except Exception as e:
-                st.error(f"Errore nella visualizzazione dell'immagine ID {selected_id}: {e}")
-    else:
-        st.warning("Nessuna immagine trovata nel file.")
-except FileNotFoundError:
-    st.error("Il file 'img2.txt' non è stato trovato nella directory corrente.")
+                st.error(f"Errore nel caricamento dell'immagine per ID {row['ID']}: {e}")
