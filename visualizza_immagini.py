@@ -58,4 +58,19 @@ else:
 tk.Label(root, text="Colonne presenti nel file:").pack()
 tk.Label(root, text=", ".join(df.columns)).pack()
 
-tk.Label(root, text="Seleziona uno o
+tk.Label(root, text="Seleziona uno o più ID:").pack()
+frame = tk.Frame(root)
+frame.pack()
+scrollbar = Scrollbar(frame)
+scrollbar.pack(side=RIGHT, fill=Y)
+
+listbox = Listbox(frame, selectmode=MULTIPLE, yscrollcommand=scrollbar.set, width=50)
+for id_ in df['ID'].unique():
+    listbox.insert(END, str(id_))
+listbox.pack()
+scrollbar.config(command=listbox.yview)
+
+tk.Button(root, text="Visualizza Immagini", command=show_images).pack(pady=10)
+
+root.mainloop()
+
