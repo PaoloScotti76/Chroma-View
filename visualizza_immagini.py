@@ -16,7 +16,7 @@ def decode_base64_image(b64_string):
 df = pd.read_csv("img.txt", sep="\t")
 
 # Titolo dell'app
-st.title("Visualizzazione immagini da file TSV")
+st.title("Visualizzazione immagini")
 
 # Visualizza la tabella con immagini
 for idx, row in df.iterrows():
@@ -30,6 +30,6 @@ for idx, row in df.iterrows():
     
     img = decode_base64_image(row["IMG"])
     if img:
-        cols[6].image(img, caption=f"ID {row['ID']}", use_column_width=True)
+        cols[6].image(img, caption=f"ID {row['ID']}", use_column_width =True)
     else:
         cols[6].write("Immagine non valida")
