@@ -12,11 +12,7 @@ with open("img.json", "r") as f:
 # Converti i dati in DataFrame
 df = pd.DataFrame(data)
 
-# Filtro multiselezione per la colonna ID
-selected_ids = st.multiselect("Seleziona ID", options=df["ID"].unique(), default=df["ID"].unique())
 
-# Filtra il DataFrame
-filtered_df = df[df["ID"].isin(selected_ids)]
 
 # Visualizza i dati
 st.write("Tabella con immagini decodificate:")
