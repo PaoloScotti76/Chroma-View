@@ -16,7 +16,7 @@ df = pd.DataFrame(data)
 
 # Visualizza i dati
 st.write("Tabella con immagini decodificate:")
-for _, row in filtered_df.iterrows():
+for row in df.iterrows():
     st.write(f"**ID: {row['ID']}**")
     for col in filtered_df.columns:
         if col == "IMG":
