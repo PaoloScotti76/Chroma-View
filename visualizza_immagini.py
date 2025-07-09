@@ -19,21 +19,21 @@ if uploaded_file is not None:
 
         # Selezione multipla degli ID
         if "ID" in data.columns:
-            selected_ids = st.multiselect("Seleziona uno o più ID:", data["ID"].unique())
+            selected_ids = st.multiselect("Seleziona uno o più ID:", data["id"].unique())
 
             # Filtra il DataFrame in base agli ID selezionati
-            filtered_data = data[data["ID"].isin(selected_ids)]
+            filtered_data = data[data["id"].isin(selected_ids)]
 
             # Visualizza le immagini codificate in base64
             for _, row in filtered_data.iterrows():
-                st.markdown(f"**ID:** {row['ID']}")
-                if "IMG" in row and isinstance(row["IMG"], str):
+                st.markdown(f"**ID:** {row['id']}")
+                if "img" in row and isinstance(row["img"], str):
                     try:
-                        img_data = base64.b64decode(row["IMG"])
+                        img_data = base64.b64decode(row["img"])
                         image = Image.open(BytesIO(img_data))
-                        st.image(image, caption=f"ID: {row['ID']}", use_column_width=True)
+                        st.image(image, caption=f"ID: {row['id']}", use_column_width=True)
                     except Exception as e:
-                        st.error(f"Errore nella decodifica dell'immagine per ID {row['ID']}: {e}")
+                        st.error(f"Errore nella decodifica dell'immagine per ID {row['id']}: {e}")
         else:
             st.warning("La colonna 'ID' non è presente nel file.")
     except Exception as e:
