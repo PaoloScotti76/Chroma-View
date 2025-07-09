@@ -3,27 +3,33 @@ import pandas as pd
 import base64
 from io import BytesIO
 from PIL import Image
-import json
 
-# Carica il file JSON dalla stessa cartella dello script
-with open("img.json", "r") as f:
-    data = json.load(f)
+# Carica il file TSV
+df = pd.read_csv("img.txt", sep="\t")
 
-# Converti i dati in DataFrame
-df = pd.DataFrame(data)
+# Funzione per convertire base64 in immagine
+def decode_base64_image(b64_string):
+    try:
+        image_data = base64.b64decode(b64_string)
+        return Image.open(BytesIO(image_data))
+    except Exception as e:
+        return None
 
-# Visualizza i dati con immagini decodificate
-st.write("Tabella con immagini decodificate:")
-for _, row in df.iterrows():
-    st.write(f"**ID: {row['ID']}**")
-    for col in df.columns:
-        if col == "IMG":
-            try:
-                image_data = base64.b64decode(row[col])
-                image = Image.open(BytesIO(image_data))
-                st.image(image, caption="IMG", use_column_width=True)
-            except Exception as e:
-                st.error(f"Errore nella decodifica dell'immagine: {e}")
-        else:
-            st.write(f"**{col}**: {row[col]}")
-    st.markdown("---")
+# Titolo
+st.title("Visualizzazione immagini da file TSV")
+
+# Visualizza la tabella con immagini
+for idx, row in df.iterrows():
+    cols = st.columns([1, 1, 2, 1, 1, 1, 2])
+    cols[0].write(row["ID"])
+    cols[1].write(row["CODE"])
+    cols[2].write(row["GODET_DESC"])
+    cols[3].write(row["CUSTOMER"])
+    cols[4].write(row["YEAR"])
+    cols[5].write(row["GODET"])
+    
+    img = decode_base64_image(row["IMG"])
+    if img:
+        cols[6].image(img, caption=f"ID {row['ID']}", use_column_width=True)
+    else:
+        cols[6].write("Immagine non valida")
