@@ -31,8 +31,8 @@ if id_options:
     filtered_df = filtered_df[filtered_df["ID"].isin(id_options)]
 if code_options:
     filtered_df = filtered_df[filtered_df["CODE"].isin(code_options)]
-if godet_options:
-    filtered_df = filtered_df[filtered_df["GODET"].isin(godet_options)]
+#if godet_options:
+ #   filtered_df = filtered_df[filtered_df["GODET"].isin(godet_options)]
 if year_options:
     filtered_df = filtered_df[filtered_df["YEAR"].isin(year_options)]
 
