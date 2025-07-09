@@ -16,10 +16,27 @@ def decode_base64_image(b64_string):
 df = pd.read_csv("img.txt", sep="\t")
 
 # Titolo dell'app
-st.title("Visualizzazione immagini")
+st.title("Visualizzazione immagini da file TSV con filtri")
+
+# Filtri multiselezione
+id_options = st.multiselect("Filtra per ID", options=sorted(df["ID"].unique()))
+code_options = st.multiselect("Filtra per CODE", options=sorted(df["CODE"].unique()))
+godet_options = st.multiselect("Filtra per GODET", options=sorted(df["GODET"].unique()))
+year_options = st.multiselect("Filtra per YEAR", options=sorted(df["YEAR"].unique()))
+
+# Applica i filtri
+filtered_df = df.copy()
+if id_options:
+    filtered_df = filtered_df[filtered_df["ID"].isin(id_options)]
+if code_options:
+    filtered_df = filtered_df[filtered_df["CODE"].isin(code_options)]
+if godet_options:
+    filtered_df = filtered_df[filtered_df["GODET"].isin(godet_options)]
+if year_options:
+    filtered_df = filtered_df[filtered_df["YEAR"].isin(year_options)]
 
 # Visualizza la tabella con immagini
-for idx, row in df.iterrows():
+for idx, row in filtered_df.iterrows():
     cols = st.columns([1, 1, 2, 1, 1, 1, 2])
     cols[0].write(row["ID"])
     cols[1].write(row["CODE"])
@@ -30,6 +47,7 @@ for idx, row in df.iterrows():
     
     img = decode_base64_image(row["IMG"])
     if img:
-        cols[6].image(img, caption=f"ID {row['ID']}", use_container_width  =True)
+        cols[6].image(img, caption=f"ID {row['ID']}", use_column_width=True)
     else:
         cols[6].write("Immagine non valida")
+
