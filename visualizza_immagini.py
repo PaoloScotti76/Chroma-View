@@ -16,7 +16,7 @@ def decode_base64_image(b64_string):
 df = pd.read_csv("img.txt", sep="\t")
 
 # Titolo
-st.title("Visualizzazione immagini da file TSV")
+st.title("Visualizzazione immagini")
 
 # Filtri nella barra laterale
 st.sidebar.header("Filtri")
