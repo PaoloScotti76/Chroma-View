@@ -40,5 +40,3 @@ if uploaded_file is not None:
         st.error(f"Errore nella lettura del file JSON: {e}")
 else:
     st.info("Carica un file JSON per iniziare.")
-
-
