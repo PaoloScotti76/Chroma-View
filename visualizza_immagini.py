@@ -40,6 +40,6 @@ for _, row in filtered_df.iterrows():
     try:
         image_data = base64.b64decode(row["IMG"])
         image = Image.open(BytesIO(image_data))
-        st.image(image, caption=f"Immagine per ID {row['ID']}", use_column_width=True)
+        st.image(image, caption=f"Immagine per ID {row['ID']}", use_container_width=True)
     except Exception as e:
         st.error(f"Errore nel caricamento immagine per ID {row['ID']}: {e}")
