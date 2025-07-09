@@ -6,7 +6,7 @@ from io import BytesIO
 from PIL import Image
 
 st.set_page_config(page_title="Visualizzatore Immagini con Metadati", layout="wide")
-st.title("Visualizzatore immagini")
+st.title("Visualizzatore immagini da file base64 con metadati")
 
 # Leggi il file
 file_path = "img2.txt"
@@ -50,4 +50,5 @@ try:
                 st.error(f"Errore nella visualizzazione dell'immagine ID {selected_id}: {e}")
     else:
         st.warning("Nessuna immagine trovata nel file.")
-except File
+except FileNotFoundError:
+    st.error("Il file 'img2.txt' non è stato trovato nella directory corrente.")
