@@ -3,37 +3,33 @@ import pandas as pd
 import base64
 from io import BytesIO
 from PIL import Image
-import requests
 import json
 
-# URL del file JSON su GitHub
-GITHUB_URL = "https://raw.githubusercontent.com/PaoloScotti76/Chroma-View/main/img.json"
+# Carica il file JSON dalla stessa cartella dello script
+with open("img.json", "r") as f:
+    data = json.load(f)
 
-@st.cache_data
-def load_data(url):
-    response = requests.get(url)
-    data = json.loads(response.text)
-    return pd.DataFrame(data)
+# Converti i dati in DataFrame
+df = pd.DataFrame(data)
 
-# Carica i dati
-df = load_data(GITHUB_URL)
-
-# Filtro multiselezione
-selected_ids = st.sidebar.multiselect("Seleziona ID", df["ID"].unique(), default=df["ID"].unique())
+# Filtro multiselezione per la colonna ID
+selected_ids = st.multiselect("Seleziona ID", options=df["ID"].unique(), default=df["ID"].unique())
 
 # Filtra il DataFrame
 filtered_df = df[df["ID"].isin(selected_ids)]
 
-# Visualizza tutte le colonne
-st.title("Visualizzatore dati e immagini")
-st.dataframe(filtered_df)
-
-# Visualizza le immagini dalla colonna IMG
+# Visualizza i dati
+st.write("Tabella con immagini decodificate:")
 for _, row in filtered_df.iterrows():
-    st.subheader(f"ID: {row['ID']}")
-    try:
-        image_data = base64.b64decode(row["IMG"])
-        image = Image.open(BytesIO(image_data))
-        st.image(image, caption=f"Immagine per ID {row['ID']}", use_column_width=True)
-    except Exception as e:
-        st.error(f"Errore nel caricamento immagine per ID {row['ID']}: {e}")
+    st.write(f"**ID: {row['ID']}**")
+    for col in filtered_df.columns:
+        if col == "IMG":
+            try:
+                image_data = base64.b64decode(row[col])
+                image = Image.open(BytesIO(image_data))
+                st.image(image, caption="IMG", use_column_width=True)
+            except Exception as e:
+                st.error(f"Errore nella decodifica dell'immagine: {e}")
+        else:
+            st.write(f"**{col}**: {row[col]}")
+    st.markdown("---")
