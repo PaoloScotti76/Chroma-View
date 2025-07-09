@@ -30,6 +30,6 @@ for idx, row in df.iterrows():
     
     img = decode_base64_image(row["IMG"])
     if img:
-        cols[6].image(img, caption=f"ID {row['ID']}", use_column_width =True)
+        cols[6].image(img, caption=f"ID {row['ID']}", use_container_width  =True)
     else:
         cols[6].write("Immagine non valida")
