@@ -12,13 +12,11 @@ with open("img.json", "r") as f:
 # Converti i dati in DataFrame
 df = pd.DataFrame(data)
 
-
-
-# Visualizza i dati
+# Visualizza i dati con immagini decodificate
 st.write("Tabella con immagini decodificate:")
-for row in df.iterrows():
+for _, row in df.iterrows():
     st.write(f"**ID: {row['ID']}**")
-    for col in filtered_df.columns:
+    for col in df.columns:
         if col == "IMG":
             try:
                 image_data = base64.b64decode(row[col])
