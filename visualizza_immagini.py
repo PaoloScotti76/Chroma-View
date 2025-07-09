@@ -9,7 +9,7 @@ st.set_page_config(page_title="Visualizzatore Immagini con Metadati", layout="wi
 st.title("HOT POURED FXI")
 
 # Leggi il file
-file_path = "img1.txt"
+file_path = "img.txt"
 
 try:
     with open(file_path, "r", encoding="utf-8") as f:
