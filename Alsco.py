@@ -3,7 +3,8 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import date
 import os
-import streamlit.components.v1 as components
+import streamlit as st
+from streamlit_js_eval import streamlit_js_eval
 
 # Aggiunta del logo centrato
 st.image("logo.png", use_container_width =False)
@@ -103,4 +104,4 @@ Informazioni aggiuntive:
 with col2:
     if st.button("Refresh"):
         {informazioni_aggiuntive} = ""
-        st.rerun()
+        streamlit_js_eval(js_expressions="parent.window.location.reload()")
