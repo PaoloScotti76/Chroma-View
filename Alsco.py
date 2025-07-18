@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
@@ -14,6 +15,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
+# Titolo con font ridotto
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
 
 # 1. Codice articolo
