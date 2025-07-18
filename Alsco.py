@@ -4,6 +4,14 @@ from email.mime.text import MIMEText
 from datetime import date
 import os
 
+
+# Funzione per pulire tutte le variabili
+def reset_form():
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.rerun()
+
+
 # Aggiunta del logo centrato
 st.image("logo.png", use_container_width =False)
 
@@ -101,5 +109,5 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):
-        del informazioni_aggiuntive
+        reset_form()
         st.rerun()
