@@ -1,9 +1,8 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-
+import os
 
 # Aggiunta del logo centrato
 st.image("logo.png", use_container_width =False)
