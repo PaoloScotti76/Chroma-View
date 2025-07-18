@@ -16,7 +16,6 @@ if "reset_form" in st.session_state and st.session_state.reset_form:
 
 def reset_form():
     st.session_state.reset_form = True
-    st.stop()
     st.rerun()
     
 st.image("logo.png", use_container_width=False)
