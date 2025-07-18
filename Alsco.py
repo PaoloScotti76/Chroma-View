@@ -93,4 +93,4 @@ Informazioni aggiuntive:
 """
     if invia_email(corpo):
         st.success("Segnalazione inviata con successo!")
-        st.experimental_rerun()
+        st.rerun()
