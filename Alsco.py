@@ -1,9 +1,7 @@
 import streamlit as st
-from streamlit_autorefresh import st_autorefresh
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
     resettable_keys = [
