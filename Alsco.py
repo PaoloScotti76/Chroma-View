@@ -6,7 +6,7 @@ from datetime import date
 
 
 # Aggiunta del logo centrato
-st.image("logo.png", use_column_width=False)
+st.image("logo.png", use_container_width =False)
 
 # Titolo con font ridotto
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
