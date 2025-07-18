@@ -6,6 +6,7 @@ from datetime import date
 def force_reset():
     st.markdown('<meta http-equiv="refresh" content="0">', unsafe_allow_html=True)
 
+st.image("logo.png", use_container_width=False)
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
 
 if "submitted" not in st.session_state:
