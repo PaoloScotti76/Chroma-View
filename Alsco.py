@@ -103,7 +103,7 @@ with col2:
         components.html(
             """
             <script>
-                window.location.reload();
+               window.location.href = "https://chromaalsco.streamlit.app/";
             </script>
             """,
             height=0,
