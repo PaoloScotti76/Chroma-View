@@ -49,7 +49,7 @@ informazioni_aggiuntive = st.text_area("Informazioni aggiuntive")
 
 # Funzione invio email
 def invia_email(corpo_email):
-    mittente = "Chroma_Alsco@gmail.com"
+    mittente = "Chromavis.Alsco@gmail.com"
     destinatari = ["paolo.scotti@chromavis.com", "paoloscotti76@gmail.com"]
     oggetto = "ALSCO - Segnalazione problemi/difetti"
 
@@ -61,7 +61,7 @@ def invia_email(corpo_email):
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.starttls()
-            server.login("Chroma_Alsco@gmail.com", "Chromavis2025!")
+            server.login("Chromavis.Alsco@gmail.com", "Chromavis2025!")
             server.sendmail(mittente, destinatari, msg.as_string())
         return True
     except Exception as e:
