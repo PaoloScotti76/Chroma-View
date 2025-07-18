@@ -105,9 +105,10 @@ Informazioni aggiuntive:
 """
         if invia_email(corpo):
             st.success("Segnalazione inviata con successo!")
+            reset_form()
 
 with col2:
     if st.button("Refresh"):
         st.success("Campi resettati")
-        #reset_form()
+        reset_form()
         
