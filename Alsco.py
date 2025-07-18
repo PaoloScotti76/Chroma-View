@@ -70,6 +70,10 @@ def invia_email(corpo_email):
 
 
 # Bottone invio
+# Bottone invio
+col1, col2 = st.columns([1, 1])
+
+with col1:
     if st.button("Invia Segnalazione"):
         corpo = f"""
 Segnalazione Problemi/Difetti - ALSCO
@@ -96,5 +100,6 @@ Informazioni aggiuntive:
         if invia_email(corpo):
             st.success("Segnalazione inviata con successo!")
 
+with col2:
     if st.button("Refresh"):
         st.rerun()
