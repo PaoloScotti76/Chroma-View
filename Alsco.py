@@ -2,7 +2,7 @@ import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-from streamlit_js_eval import streamlit_js_eval
+from streamlit_autorefresh import st_autorefresh
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
     resettable_keys = [
@@ -99,5 +99,7 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):    
-        streamlit_js_eval(js_expressions="parent.window.location.reload()")
+        count = st_autorefresh(interval=2000, limit=100, key="fizzbuzzcounter")
+        reset_form()
+        
 
