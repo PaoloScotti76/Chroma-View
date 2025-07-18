@@ -6,15 +6,7 @@ from datetime import date
 
 
 # Aggiunta del logo centrato
-st.markdown(
-    """
-    <div style='text-align: center;'>
-        <img src='https://github.com/PaoloScotti76/Chroma-View/blob/main/logo.png' width='200'>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
+st.image("logo.png", use_column_width=False)
 
 # Titolo con font ridotto
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
