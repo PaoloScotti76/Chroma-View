@@ -81,7 +81,6 @@ Informazioni aggiuntive:
 
         st.success("Segnalazione inviata con successo!")
         st.session_state.submitted = True
-        force_reset()
 
     except Exception as e:
         st.error(f"Errore nell'invio dell'email: {e}")
