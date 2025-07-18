@@ -88,6 +88,3 @@ Informazioni aggiuntive:
 """
     if invia_email(corpo):
         st.success("Segnalazione inviata con successo!")
-        components.html("<meta http-equiv='refresh' content='1'>", height=0)
-
-
