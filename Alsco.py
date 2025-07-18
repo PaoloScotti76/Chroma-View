@@ -101,4 +101,5 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):
-        streamlit_js_eval(js_expressions="parent.window.location.reload()")
+        del informazioni_aggiuntive
+        st.rerun()
