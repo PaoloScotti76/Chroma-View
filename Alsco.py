@@ -1,93 +1,97 @@
 import streamlit as st
-from datetime import date
-import pandas as pd
 import smtplib
-from email.message import EmailMessage
-import tempfile
-import os
+from email.mime.text import MIMEText
+from datetime import date
 
-st.title("Modulo di Rilevamento Difetti")
+st.title("Modulo Segnalazione Problemi/Difetti - ALSCO")
 
-# Selezione articolo
-articoli = ["Camice Oscar", "Giacca", "Pantaloni"]
-articolo = st.selectbox("Codice articolo e tipo:", articoli)
+# 1. Codice articolo
+codice_articolo = st.selectbox("Codice Articolo", [
+    "C0015175 – Camice Oscar Chromavis C/Tasche C/Elastico e Bottoni Polsi SBM Bianco",
+    "C0015176 – Giacca Chromavis C/Tasca Int. C/Elastico e Bottoni Polsi Ecru",
+    "C0015177 Pantalone Chromavis Evan – CHR C/Reg. Fondo SBM Ecru",
+    "C0015178 – Giacca Ariel Chromavis C/Tasche C/Bottoni SBM Charcoal/Ecru",
+    "C0015179 – Pantalone Evan Chromavis C/Tasche C/reg. Fondo SBM Charcoal/Ecru"
+])
 
-# Selezione taglia
-taglie = {
-    "XXS": 1, "XS": 2, "S": 3, "M": 4, "L": 5, "XL": 6,
-    "2XL": 7, "3XL": 8, "4XL": 9, "5XL": 10, "6XL": 11
-}
-taglia = st.selectbox("Taglia:", list(taglie.keys()))
+# 2. Taglia
+taglia = st.selectbox("Selezione Taglia", [
+    "XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"
+])
 
-# Data rilevamento
-data_rilevamento = st.date_input("Data di rilevamento del difetto:", value=date.today())
+# 3. Data rilevamento
+data_rilevamento = st.date_input("Data di rilevamento del difetto", value=date.today())
 
-# Responsabile
-responsabile = st.text_input("Responsabile del rilevamento (Nome e Cognome):")
+# 4. Responsabile
+st.subheader("Responsabile del rilevamento")
+nome_cognome = st.text_input("Nome e Cognome")
+id_badge = st.text_input("ID Badge")
+codice_barre = st.text_input("Codice a Barre del Capo (Se leggibile)")
 
-# ID Badge
-id_badge = st.text_input("ID Badge:")
+# 5. Difetto
+difetto = st.selectbox("Difetto/Problema", [
+    "Macchie", "Scuciture", "Bottoni a pressione non si chiudono", "Bottoni Rotti"
+])
 
-# Codice a barre
-codice_barre = st.text_input("Codice a barre del capo:")
+# 6. Localizzazione
+localizzazione = st.selectbox("Localizzazione del difetto", [
+    "Anteriore", "Posteriore", "Interna", "Petto", "Fianco dx", "Fianco sx", "Laterale dx", "Laterale sx"
+])
 
-# Difetti
-difetti = [
-    "Macchie - colletto", "Macchie - maniche", "Macchie - polsini", "Macchie - tronco",
-    "Scuciture - orlo", "Scuciture - laterali", "Scuciture - patta", "Scuciture - bordo interna", "Scuciture - tasca", "Scuciture - manica",
-    "Bottoni a pressione non si chiudono - frontali", "Bottoni a pressione non si chiudono - polsini", "Bottoni a pressione non si chiudono - in vita",
-    "Bottoni a pressione non si chiudono - patta", "Bottoni a pressione non si chiudono - stringivita", "Bottoni a pressione non si chiudono - alla caviglia",
-    "Bottoni rotti - polsini", "Bottoni rotti - in vita", "Bottoni rotti - stringivita", "Bottoni rotti - alla caviglia"
-]
-difetto = st.selectbox("Tipo di difetto:", difetti)
+# 7. Credito non disponibile
+credito_non_disponibile = st.checkbox("Credito non disponibile")
 
-# Localizzazione
-localizzazioni = ["anteriore", "posteriore", "interna", "sul petto", "sul fianco", "dx", "sx", "dx laterale", "sx posteriore"]
-localizzazione = st.selectbox("Localizzazione del difetto:", localizzazioni)
+# 8. Richieste specifiche
+richieste_specifiche = st.text_area("Richieste specifiche")
 
-# Configurazione SMTP
-st.markdown("### Configurazione SMTP")
-smtp_server = st.text_input("SMTP Server", value="smtp.chromavis.com")
-smtp_port = st.number_input("SMTP Port", value=587)
-smtp_user = st.text_input("SMTP Username", value="noreply@chromavis.com")
-smtp_password = st.text_input("SMTP Password", type="password")
+# 9. Informazioni aggiuntive
+informazioni_aggiuntive = st.text_area("Informazioni aggiuntive")
 
-# Invio
-if st.button("Invia segnalazione via email"):
-    df = pd.DataFrame([{
-        "Articolo": articolo,
-        "Taglia": taglia,
-        "Codice Taglia": taglie[taglia],
-        "Data Rilevamento": data_rilevamento,
-        "Responsabile": responsabile,
-        "ID Badge": id_badge,
-        "Codice a Barre": codice_barre,
-        "Difetto": difetto,
-        "Localizzazione": localizzazione
-    }])
+# Funzione invio email
+def invia_email(corpo_email):
+    mittente = "paoloscotti76@gmail.com"
+    destinatari = ["paolo.scotti@chromavis.com", "paoloscotti76@gmail.com"]
+    oggetto = "ALSCO - Segnalazione problemi/difetti"
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp:
-        excel_path = tmp.name
-        df.to_excel(excel_path, index=False)
-
-    msg = EmailMessage()
-    msg['Subject'] = 'Segnalazione Difetto'
-    msg['From'] = smtp_user
-    msg['To'] = 'paolo.scotti@chromavis.com'
-    msg.set_content('In allegato la segnalazione del difetto rilevato.')
-
-    with open(excel_path, "rb") as f:
-        msg.add_attachment(f.read(), maintype="application",
-                           subtype="vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                           filename="segnalazione.xlsx")
+    msg = MIMEText(corpo_email)
+    msg["Subject"] = oggetto
+    msg["From"] = mittente
+    msg["To"] = ", ".join(destinatari)
 
     try:
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.starttls()
-            server.login(smtp_user, smtp_password)
-            server.send_message(msg)
-        st.success("Email inviata con successo a paolo.scotti@chromavis.com")
+            server.login("paoloscotti76@gmail.com", "Giadina04!")
+            server.sendmail(mittente, destinatari, msg.as_string())
+        return True
     except Exception as e:
-        st.error(f"Errore durante l'invio dell'email: {e}")
-    finally:
-        os.remove(excel_path)
+        st.error(f"Errore nell'invio dell'email: {e}")
+        return False
+
+# Bottone invio
+if st.button("Invia Segnalazione"):
+    corpo = f"""
+Segnalazione Problemi/Difetti - ALSCO
+
+Codice Articolo: {codice_articolo}
+Taglia: {taglia}
+Data rilevamento: {data_rilevamento}
+
+Responsabile:
+- Nome e Cognome: {nome_cognome}
+- ID Badge: {id_badge}
+- Codice a Barre: {codice_barre}
+
+Difetto/Problema: {difetto}
+Localizzazione: {localizzazione}
+Credito non disponibile: {"Sì" if credito_non_disponibile else "No"}
+
+Richieste specifiche:
+{richieste_specifiche}
+
+Informazioni aggiuntive:
+{informazioni_aggiuntive}
+"""
+    if invia_email(corpo):
+        st.success("Segnalazione inviata con successo!")
+
