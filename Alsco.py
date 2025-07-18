@@ -25,34 +25,34 @@ codice_articolo = st.selectbox("Codice Articolo", [" ",
     "C0015177 Pantalone Chromavis Evan – CHR C/Reg. Fondo SBM Ecru",
     "C0015178 – Giacca Ariel Chromavis C/Tasche C/Bottoni SBM Charcoal/Ecru",
     "C0015179 – Pantalone Evan Chromavis C/Tasche C/reg. Fondo SBM Charcoal/Ecru"
-])
+], key="codice_articolo")
 
 # 2. Taglia
-taglia = st.selectbox("Selezione Taglia", [" ","XXS - 1", "XS - 2", "S - 3", "M - 4", "L - 5", "XL - 6", "2XL - 7", "3XL - 8", "4XL - 9", "5XL - 10", "6XL - 11"])
+taglia = st.selectbox("Selezione Taglia", [" ","XXS - 1", "XS - 2", "S - 3", "M - 4", "L - 5", "XL - 6", "2XL - 7", "3XL - 8", "4XL - 9", "5XL - 10", "6XL - 11"], key="taglia")
 
 # 3. Data rilevamento
-data_rilevamento = st.date_input("Data di rilevamento del difetto", value=date.today())
+data_rilevamento = st.date_input("Data di rilevamento del difetto", value=date.today(), key="data_rilevamento")
 
 # 4. Responsabile
 st.subheader("Responsabile del rilevamento")
-nome_cognome = st.text_input("Nome e Cognome")
-id_badge = st.text_input("ID Badge")
-codice_barre = st.text_input("Codice a Barre del Capo (Se leggibile)")
+nome_cognome = st.text_input("Nome e Cognome", key="nome_cognome")
+id_badge = st.text_input("ID Badge", key="id_badge")
+codice_barre = st.text_input("Codice a Barre del Capo (Se leggibile)", key="codice_barre")
 
 # 5. Difetto
-difetto = st.selectbox("Difetto/Problema", [" ","Macchie", "Scuciture", "Bottoni a pressione non si chiudono", "Bottoni Rotti"])
+difetto = st.selectbox("Difetto/Problema", [" ","Macchie", "Scuciture", "Bottoni a pressione non si chiudono", "Bottoni Rotti"], key="difetto")
 
 # 6. Localizzazione
-localizzazione = st.selectbox("Localizzazione del difetto", [" ", "Anteriore", "Posteriore", "Interna", "Petto", "Fianco dx", "Fianco sx", "Laterale dx", "Laterale sx"])
+localizzazione = st.selectbox("Localizzazione del difetto", [" ", "Anteriore", "Posteriore", "Interna", "Petto", "Fianco dx", "Fianco sx", "Laterale dx", "Laterale sx"], key="localizzazione")
 
 # 7. Credito non disponibile
-credito_non_disponibile = st.checkbox("Credito non disponibile")
+credito_non_disponibile = st.checkbox("Credito non disponibile", key="credito_non_disponibile")
 
 # 8. Richieste specifiche
-richieste_specifiche = st.text_area("Richieste specifiche")
+richieste_specifiche = st.text_area("Richieste specifiche", key="richieste_specifiche")
 
 # 9. Informazioni aggiuntive
-informazioni_aggiuntive = st.text_area("Informazioni aggiuntive")
+informazioni_aggiuntive = st.text_area("Informazioni aggiuntive", key="informazioni_aggiuntive")
 
 # Funzione invio email
 def invia_email(corpo_email):
