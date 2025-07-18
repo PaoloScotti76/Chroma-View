@@ -16,6 +16,7 @@ if "reset_form" in st.session_state and st.session_state.reset_form:
 
 def reset_form():
     st.session_state.reset_form = True
+    st.stop()
     st.rerun()
     
 st.image("logo.png", use_container_width=False)
@@ -98,7 +99,6 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):    
-        count = st_autorefresh(interval=2000, limit=100, key="fizzbuzzcounter")
         reset_form()
         
 
