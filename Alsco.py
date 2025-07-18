@@ -102,5 +102,5 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):
-        components.html("<meta http-equiv='refresh' content='1'>", height=0)
+        {informazioni_aggiuntive} = ""
         st.rerun()
