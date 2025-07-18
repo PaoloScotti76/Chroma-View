@@ -1,24 +1,32 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jul 18 12:14:09 2025
+
+@author: NFCAPPELLO
+"""
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-import os
 
+if "reset_form" in st.session_state and st.session_state.reset_form:
+    resettable_keys = [
+        "codice_articolo", "taglia", "data_rilevamento", "nome_cognome",
+        "id_badge", "codice_barre", "difetto", "localizzazione",
+        "credito_non_disponibile", "richieste_specifiche", "informazioni_aggiuntive"
+    ]
+    for key in resettable_keys:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.session_state.reset_form = False
 
-# Funzione per pulire tutte le variabili
 def reset_form():
-    for key in st.session_state.keys():
-        del st.session_state[key]
+    st.session_state.reset_form = True
     st.rerun()
 
-
-# Aggiunta del logo centrato
-st.image("logo.png", use_container_width =False)
-
-# Titolo con font ridotto
+st.image("logo.png", use_container_width=False)
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
 
-# 1. Codice articolo
 codice_articolo = st.selectbox("Codice Articolo", [" ",
     "C0015175 – Camice Oscar Chromavis C/Tasche C/Elastico e Bottoni Polsi SBM Bianco",
     "C0015176 – Giacca Chromavis C/Tasca Int. C/Elastico e Bottoni Polsi Ecru",
@@ -27,44 +35,33 @@ codice_articolo = st.selectbox("Codice Articolo", [" ",
     "C0015179 – Pantalone Evan Chromavis C/Tasche C/reg. Fondo SBM Charcoal/Ecru"
 ], key="codice_articolo")
 
-# 2. Taglia
 taglia = st.selectbox("Selezione Taglia", [" ","XXS - 1", "XS - 2", "S - 3", "M - 4", "L - 5", "XL - 6", "2XL - 7", "3XL - 8", "4XL - 9", "5XL - 10", "6XL - 11"], key="taglia")
 
-# 3. Data rilevamento
 data_rilevamento = st.date_input("Data di rilevamento del difetto", value=date.today(), key="data_rilevamento")
 
-# 4. Responsabile
 st.subheader("Responsabile del rilevamento")
 nome_cognome = st.text_input("Nome e Cognome", key="nome_cognome")
 id_badge = st.text_input("ID Badge", key="id_badge")
 codice_barre = st.text_input("Codice a Barre del Capo (Se leggibile)", key="codice_barre")
 
-# 5. Difetto
 difetto = st.selectbox("Difetto/Problema", [" ","Macchie", "Scuciture", "Bottoni a pressione non si chiudono", "Bottoni Rotti"], key="difetto")
 
-# 6. Localizzazione
 localizzazione = st.selectbox("Localizzazione del difetto", [" ", "Anteriore", "Posteriore", "Interna", "Petto", "Fianco dx", "Fianco sx", "Laterale dx", "Laterale sx"], key="localizzazione")
 
-# 7. Credito non disponibile
 credito_non_disponibile = st.checkbox("Credito non disponibile", key="credito_non_disponibile")
 
-# 8. Richieste specifiche
 richieste_specifiche = st.text_area("Richieste specifiche", key="richieste_specifiche")
 
-# 9. Informazioni aggiuntive
 informazioni_aggiuntive = st.text_area("Informazioni aggiuntive", key="informazioni_aggiuntive")
 
-# Funzione invio email
 def invia_email(corpo_email):
     mittente = "chromavis.alsco@gmail.com"
     destinatari = ["silvia.casagrande@chromavis.com"]
     oggetto = "ALSCO - Segnalazione problemi/difetti"
-
     msg = MIMEText(corpo_email)
     msg["Subject"] = oggetto
     msg["From"] = mittente
     msg["To"] = ", ".join(destinatari)
-
     try:
         with smtplib.SMTP("smtp-relay.brevo.com", 587) as server:
             server.starttls()
@@ -75,8 +72,6 @@ def invia_email(corpo_email):
         st.error(f"Errore nell'invio dell'email: {e}")
         return False
 
-
-# Bottone invio
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -109,6 +104,4 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):
-        st.success("Campi resettati")
         reset_form()
-        
