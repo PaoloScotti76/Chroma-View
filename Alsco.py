@@ -77,7 +77,6 @@ def invia_email(corpo_email):
 
 
 # Bottone invio
-# Bottone invio
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -110,5 +109,5 @@ Informazioni aggiuntive:
 with col2:
     if st.button("Refresh"):
         st.success("Campi resettati")
-        reset_form()
+        #reset_form()
         
