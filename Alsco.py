@@ -3,8 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import date
 import os
-import streamlit as st
-from streamlit_js_eval import streamlit_js_eval
+import streamlit as st from streamlit_js_eval import streamlit_js_eval
 
 # Aggiunta del logo centrato
 st.image("logo.png", use_container_width =False)
