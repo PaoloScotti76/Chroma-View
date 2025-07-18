@@ -53,9 +53,9 @@ def invia_email(corpo_email):
     msg["To"] = ", ".join(destinatari)
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 25) as server:
+        with smtplib.SMTP("smtp-relay.brevo.com", 587) as server:
             server.starttls()
-            server.login("chromavis.alsco@gmail.com", "Chromavis2025!")
+            server.login("926aa8001@smtp-brevo.com", "c9kDXBaMtPIgSHOx")
             server.sendmail(mittente, destinatari, msg.as_string())
         return True
     except Exception as e:
@@ -87,5 +87,6 @@ Informazioni aggiuntive:
 {informazioni_aggiuntive}
 """
     if invia_email(corpo):
+        st.success("Segnalazione inviata con successo!")
         st.success("Segnalazione inviata con successo!")
 
