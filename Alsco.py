@@ -1,8 +1,9 @@
 import streamlit as st
 import smtplib
-from streamlit.server.server import Server
 from email.mime.text import MIMEText
 from datetime import date
+import streamlit as st2
+from streamlit.server.server import Server
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
     resettable_keys = [
@@ -18,6 +19,9 @@ if "reset_form" in st.session_state and st.session_state.reset_form:
 def reset_form():
     st.session_state.reset_form = True
     st.rerun()
+    
+def refreshp():
+    Server.get_current()._reloader.reload()
 
 st.image("logo.png", use_container_width=False)
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
@@ -99,5 +103,5 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):    
-        reset_form()
+        refreshp()
 
