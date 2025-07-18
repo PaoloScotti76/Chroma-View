@@ -3,6 +3,17 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import date
 
+
+# Aggiunta del logo centrato
+st.markdown(
+    """
+    <div style='text-align: center;'>
+        <img src='logo.png' width='200'>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
 
 # 1. Codice articolo
