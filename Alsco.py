@@ -59,7 +59,7 @@ def invia_email(corpo_email):
     msg["To"] = ", ".join(destinatari)
 
     try:
-        with smtplib.SMTP("smtp.chromavis.com", 25) as server:
+        with smtplib.SMTP("relay.chromavis.com", 25) as server:
             server.starttls()
             server.login("paolo.scotti@chromavis.com", "Giadina2004!")
             server.sendmail(mittente, destinatari, msg.as_string())
