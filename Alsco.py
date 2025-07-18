@@ -2,8 +2,6 @@ import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-import streamlit.components.v1 as components
-
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
     resettable_keys = [
@@ -99,14 +97,6 @@ Informazioni aggiuntive:
             reset_form()
 
 with col2:
-    if st.button("Ricarica la pagina"):
-        components.html(
-            """
-            <script>
-               window.location.href = "https://chromaalsco.streamlit.app/";
-            </script>
-            """,
-            height=0,
-        )
-
+    if st.button("Refresh"):
+        reset_form()
 
