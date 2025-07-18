@@ -9,7 +9,7 @@ from datetime import date
 st.markdown(
     """
     <div style='text-align: center;'>
-        <img src='logo.png' width='200'>
+        <img src='https://github.com/PaoloScotti76/Chroma-View/logo.png' width='200'>
     </div>
     """,
     unsafe_allow_html=True
