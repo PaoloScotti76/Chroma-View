@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul 18 12:14:09 2025
-
-@author: NFCAPPELLO
-"""
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
+import streamlit.components.v1 as components
+
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
     resettable_keys = [
@@ -104,4 +100,12 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):
-        reset_form()
+    components.html(
+        """
+        <script>
+            window.location.reload();
+        </script>
+        """,
+        height=0,
+    )
+
