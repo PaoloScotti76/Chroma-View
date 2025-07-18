@@ -2,7 +2,6 @@ import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-import streamlit as st2
 from streamlit.server.server import Server
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
