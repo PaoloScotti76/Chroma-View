@@ -65,7 +65,7 @@ Informazioni aggiuntive:
 """
     try:
         mittente = "chromavis.alsco@gmail.com"
-        destinatari = ["nadia.festini.cappello@chromavis.com"]
+        destinatari = ["paolo.scotti@chromavis.com"]
         oggetto = "ALSCO - Segnalazione problemi/difetti"
 
         msg = MIMEText(corpo)
