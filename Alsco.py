@@ -109,5 +109,6 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):
-        reset_form()
         st.success("Campi resettati")
+        reset_form()
+        
