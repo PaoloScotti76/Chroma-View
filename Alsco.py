@@ -3,6 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import date
 import os
+import streamlit.components.v1 as components
 
 # Aggiunta del logo centrato
 st.image("logo.png", use_container_width =False)
@@ -67,10 +68,8 @@ def invia_email(corpo_email):
         st.error(f"Errore nell'invio dell'email: {e}")
         return False
 
-# Bottone invio
-col1, col2 = st.columns([1, 1])
 
-with col1:
+# Bottone invio
     if st.button("Invia Segnalazione"):
         corpo = f"""
 Segnalazione Problemi/Difetti - ALSCO
@@ -97,6 +96,5 @@ Informazioni aggiuntive:
         if invia_email(corpo):
             st.success("Segnalazione inviata con successo!")
 
-with col2:
     if st.button("Refresh"):
         st.rerun()
