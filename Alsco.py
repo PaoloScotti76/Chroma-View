@@ -44,7 +44,7 @@ informazioni_aggiuntive = st.text_area("Informazioni aggiuntive")
 # Funzione invio email
 def invia_email(corpo_email):
     mittente = "chromavis.alsco@gmail.com"
-    destinatari = ["paoloscotti76@gmail.com"]
+    destinatari = ["silvia.casagrande@chromavis.com"]
     oggetto = "ALSCO - Segnalazione problemi/difetti"
 
     msg = MIMEText(corpo_email)
