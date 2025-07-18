@@ -35,13 +35,7 @@ with st.form(key="segnalazione_form"):
     richieste_specifiche = st.text_area("Richieste specifiche")
     informazioni_aggiuntive = st.text_area("Informazioni aggiuntive")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        submit = st.form_submit_button("Invia Segnalazione")
-    with col2:
-        reset = st.form_submit_button("Refresh")
-
-if submit:
+if st.form_submit_button("Invia Segnalazione"):
     corpo = f"""
 Segnalazione Problemi/Difetti - ALSCO
 
@@ -85,6 +79,3 @@ Informazioni aggiuntive:
 
     except Exception as e:
         st.error(f"Errore nell'invio dell'email: {e}")
-
-if reset:
-    force_reset()
