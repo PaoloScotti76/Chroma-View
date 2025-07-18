@@ -6,7 +6,7 @@ from datetime import date
 st.title("Modulo Segnalazione Problemi/Difetti - ALSCO")
 
 # 1. Codice articolo
-codice_articolo = st.selectbox("Codice Articolo", [
+codice_articolo = st.selectbox("Codice Articolo", [" ",
     "C0015175 – Camice Oscar Chromavis C/Tasche C/Elastico e Bottoni Polsi SBM Bianco",
     "C0015176 – Giacca Chromavis C/Tasca Int. C/Elastico e Bottoni Polsi Ecru",
     "C0015177 Pantalone Chromavis Evan – CHR C/Reg. Fondo SBM Ecru",
@@ -15,9 +15,7 @@ codice_articolo = st.selectbox("Codice Articolo", [
 ])
 
 # 2. Taglia
-taglia = st.selectbox("Selezione Taglia", [
-    "XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL", "6XL"
-])
+taglia = st.selectbox("Selezione Taglia", [" ","XXS - 1", "XS - 2", "S - 3", "M - 4", "L - 5", "XL - 6", "2XL - 7", "3XL - 8", "4XL - 9", "5XL - 10", "6XL - 11"])
 
 # 3. Data rilevamento
 data_rilevamento = st.date_input("Data di rilevamento del difetto", value=date.today())
@@ -29,14 +27,10 @@ id_badge = st.text_input("ID Badge")
 codice_barre = st.text_input("Codice a Barre del Capo (Se leggibile)")
 
 # 5. Difetto
-difetto = st.selectbox("Difetto/Problema", [
-    "Macchie", "Scuciture", "Bottoni a pressione non si chiudono", "Bottoni Rotti"
-])
+difetto = st.selectbox("Difetto/Problema", [" ","Macchie", "Scuciture", "Bottoni a pressione non si chiudono", "Bottoni Rotti"])
 
 # 6. Localizzazione
-localizzazione = st.selectbox("Localizzazione del difetto", [
-    "Anteriore", "Posteriore", "Interna", "Petto", "Fianco dx", "Fianco sx", "Laterale dx", "Laterale sx"
-])
+localizzazione = st.selectbox("Localizzazione del difetto", [" ", "Anteriore", "Posteriore", "Interna", "Petto", "Fianco dx", "Fianco sx", "Laterale dx", "Laterale sx"])
 
 # 7. Credito non disponibile
 credito_non_disponibile = st.checkbox("Credito non disponibile")
@@ -50,7 +44,7 @@ informazioni_aggiuntive = st.text_area("Informazioni aggiuntive")
 # Funzione invio email
 def invia_email(corpo_email):
     mittente = "chromavis.alsco@gmail.com"
-    destinatari = ["paolo.scotti@chromavis.com", "paoloscotti76@gmail.com"]
+    destinatari = ["paoloscotti76@gmail.com"]
     oggetto = "ALSCO - Segnalazione problemi/difetti"
 
     msg = MIMEText(corpo_email)
@@ -59,9 +53,9 @@ def invia_email(corpo_email):
     msg["To"] = ", ".join(destinatari)
 
     try:
-        with smtplib.SMTP("smtp-relay.brevo.com", 587) as server:
+        with smtplib.SMTP("smtp.gmail.com", 25) as server:
             server.starttls()
-            server.login("926aa8001@smtp-brevo.com", "c9kDXBaMtPIgSHOx")
+            server.login("chromavis.alsco@gmail.com", "Chromavis2025!")
             server.sendmail(mittente, destinatari, msg.as_string())
         return True
     except Exception as e:
