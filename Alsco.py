@@ -59,9 +59,9 @@ def invia_email(corpo_email):
     msg["To"] = ", ".join(destinatari)
 
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        with smtplib.SMTP("smtp.chromavis.com", 25) as server:
             server.starttls()
-            server.login("paoloscotti76@gmail.com", "Giadina04!")
+            server.login("paolo.scotti@chromavis.com", "Giadina2004!")
             server.sendmail(mittente, destinatari, msg.as_string())
         return True
     except Exception as e:
