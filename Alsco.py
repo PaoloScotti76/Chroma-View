@@ -99,13 +99,14 @@ Informazioni aggiuntive:
             reset_form()
 
 with col2:
-    if st.button("Refresh"):
-    components.html(
-        """
-        <script>
-            window.location.reload();
-        </script>
-        """,
-        height=0,
-    )
+    if st.button("Ricarica la pagina"):
+        components.html(
+            """
+            <script>
+                window.location.reload();
+            </script>
+            """,
+            height=0,
+        )
+
 
