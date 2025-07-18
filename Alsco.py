@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 from datetime import date
 
-st.title("Modulo Segnalazione Problemi/Difetti - ALSCO")
+st.markdown("<h4>Modulo Segnalazione Problemi/Difetti - ALSCO</h4>", unsafe_allow_html=True)
 
 # 1. Codice articolo
 codice_articolo = st.selectbox("Codice Articolo", [" ",
