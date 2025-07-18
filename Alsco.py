@@ -2,8 +2,6 @@ import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 from datetime import date
-import subprocess
-
 
 if "reset_form" in st.session_state and st.session_state.reset_form:
     resettable_keys = [
@@ -100,6 +98,5 @@ Informazioni aggiuntive:
 
 with col2:
     if st.button("Refresh"):    
-        subprocess.run(["streamlit", "run", "Alsco.py"])
         reset_form()
 
