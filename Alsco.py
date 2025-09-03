@@ -66,7 +66,7 @@ Informazioni aggiuntive:
 """
     try:
         mittente = "chromavis.alsco@gmail.com"
-        destinatari = ["silvia.casagrande@chromavis.com,d.lanoce@alsco.it,d.cavalli@alsco.it,e.quarantiello@alsco.it"]
+        destinatari = ["silvia.casagrande@chromavis.com;paoloscotti76@gmail.com;d.lanoce@alsco.it;d.cavalli@alsco.it;e.quarantiello@alsco.it"]
         oggetto = "ALSCO - Segnalazione problemi/difetti"
 
         msg = MIMEText(corpo)
@@ -87,5 +87,6 @@ Informazioni aggiuntive:
 
 if reset:
     force_reset()
+
 
 
